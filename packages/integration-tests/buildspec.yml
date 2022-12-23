@@ -1,0 +1,13 @@
+# Integration tests CodeBuild
+version: 0.2
+phases:
+  install:
+    commands:
+      - n 16.15
+      - cd packages/integration-tests
+  build:
+    commands:
+      - bash ./codebuild-run-tests.sh
+artifacts:
+  files:
+    - integration-tests/**/*
