@@ -1,0 +1,30 @@
+sendEmail:
+  handler: services/email/email-handler.sendEmail
+  environment:
+    EMAIL_QUEUE_NAME: ${self:custom.emailQueueName}
+  events:
+    - sqs:
+        arn: !GetAtt emailQueue.Arn
+        batchSize: 1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sqs:ReceiveMessage
+      Resource: !Sub arn:aws:sqs:*:${AWS::AccountId}:${self:custom.emailQueueName}
+    - Effect: Allow
+      Action:
+        - ses:SendEmail
+      Resource:
+        - arn:aws:ses:*:*:identity/*
+    - Effect: Allow
+      Action:
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource:
+        - '*'
+    - Effect: Allow
+      Action:
+        - ssm:GetParameters
+        - ssm:GetParametersByPath
+      Resource:
+        - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:provider.stage}/email-service/from-address
