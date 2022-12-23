@@ -1,0 +1,12 @@
+{
+  "body": "{\"emailAddress\":\"email@example.com\"}",
+  "pathParameters": {
+    "listId": "1234"
+  },
+
+  "requestContext": {
+    "identity": {
+      "cognitoIdentityId": "USER-SUB-1234"
+    }
+  }
+}
