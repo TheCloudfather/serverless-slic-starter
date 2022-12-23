@@ -1,0 +1,35 @@
+handleNewChecklist:
+  handler: services/welcome/new-checklist-handler.handleNewChecklist
+  environment:
+    EMAIL_QUEUE_NAME: ${self:custom.emailQueueName}
+  events:
+    - cloudwatchEvent:
+        event:
+          source:
+            - 'checklist-service'
+          detail-type:
+            - 'LIST_CREATED_EVENT'
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sqs:GetQueueUrl
+        - sqs:SendMessage
+      Resource: arn:aws:sqs:*:${aws:accountId}:${self:custom.emailQueueName}
+    - Effect: Allow
+      Action:
+        - ssm:GetParameters
+        - ssm:GetParametersByPath
+      Resource:
+        - arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/${self:provider.stage}/user-service/url
+    - Effect: Allow
+      Action:
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource:
+        - '*'
+    - Effect: Allow
+      Action:
+        - execute-api:Invoke
+        - execute-api:GET
+      Resource:
+        - arn:aws:execute-api:${aws:region}:${aws:accountId}:*/${self:provider.stage}/GET/user/*

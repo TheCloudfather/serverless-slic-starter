@@ -1,0 +1,46 @@
+{
+  "name": "checklist-service",
+  "version": "1.0.0",
+  "description": "Checklist Service",
+  "scripts": {
+    "sls": "../node_modules/serverless/bin/serverless",
+    "start": "source ../localstack.env && sls offline start --region us-east-1",
+    "lint": "eslint .",
+    "format": "eslint --cache --fix \"**/*.js\"",
+    "coverage": "npm run test -- --cov --coverage-report=html",
+    "test": "AWS_XRAY_CONTEXT_MISSING=LOG_ERROR AWS_XRAY_LOG_LEVEL=silent tap \"test/**/*.test.js\" --branches=100 --statements=100 --functions=100 --lines=100"
+  },
+  "author": "Eoin Shanaghy <eoin.shanaghy@fourtheorem.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fourTheorem/slic-starter"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "aws-sdk-mock": "^4.5.0",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-source-map-support": "^2.1.1",
+    "proxyquire": "^2.1.0",
+    "serverless-api-gateway-throttling": "^1.1.1",
+    "serverless-bundle": "^5.0.2",
+    "serverless-dynamodb-local": "^0.2.40",
+    "serverless-iam-roles-per-function": "^3.2.0",
+    "serverless-offline": "^8.2.0",
+    "serverless-prune-plugin": "^1.6.0",
+    "serverless-slic-watch-plugin": "^1.0.4",
+    "tap": "^15.0.10",
+    "yamljs": "^0.3.0"
+  },
+  "dependencies": {
+    "aws-embedded-metrics": "^1.0.1",
+    "slic-tools": "file:../slic-tools",
+    "uuid": "^3.3.3"
+  },
+  "nyc": {
+    "exclude": [
+      "**/test/**/*.js"
+    ]
+  }
+}

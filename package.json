@@ -1,0 +1,65 @@
+{
+  "name": "slic-starter",
+  "version": "1.0.0",
+  "description": "A complete serverless starter application",
+  "scripts": {
+    "coverage": "npm run test:packages -- --cov --coverage-report=html",
+    "format": "eslint --cache --fix .",
+    "test:lint": "eslint .",
+    "tap": "AWS_XRAY_CONTEXT_MISSING=LOG_ERROR AWS_XRAY_LOG_LEVEL=silent tap",
+    "test:packages": "npm run tap -- --branches=100 --statements=100 --functions=100 --lines=100",
+    "test": "npm run test:lint && npm run test:packages"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fourTheorem/slic-starter.git"
+  },
+  "keywords": [
+    "serverless",
+    "starter",
+    "project",
+    "aws"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fourTheorem/slic-starter/issues"
+  },
+  "homepage": "https://github.com/fourTheorem/slic-starter#readme",
+  "devDependencies": {
+    "aws-sdk-mock": "^5.4.0",
+    "awscred": "^1.4.2",
+    "eslint": "^7.26.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.23.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-standard": "^5.0.0",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.0.0",
+    "proxyquire": "^2.1.3",
+    "serverless": "^2.68.0",
+    "tap": "^15.0.10"
+  },
+  "dependencies": {
+    "@hapi/bourne": "^2.0.0",
+    "@middy/core": "^2.5.3",
+    "@middy/http-cors": "^2.5.3",
+    "@middy/http-error-handler": "^2.5.3",
+    "@middy/http-event-normalizer": "^2.5.3",
+    "@middy/http-json-body-parser": "^2.5.3",
+    "@middy/http-response-serializer": "^2.5.3",
+    "@middy/input-output-logger": "^2.5.3",
+    "@middy/ssm": "^2.5.3",
+    "aws-sdk": "^2.867.0",
+    "aws-signed-axios": "^1.1.0",
+    "aws-xray-sdk-core": "^3.3.3",
+    "lodash": "^4.17.21",
+    "middy": "^0.36.0",
+    "pino": "^6.13.3"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --cache --fix"
+    ]
+  }
+}
