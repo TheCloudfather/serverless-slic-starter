@@ -1,0 +1,66 @@
+create:
+  handler: services/sharing/create.main
+  events:
+    - http:
+        path: /
+        method: post
+        cors: true
+        authorizer:
+          type: COGNITO_USER_POOLS
+          authorizerId:
+            Ref: cognitoAuthorizer
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource:
+        - '*'
+    - Effect: Allow
+      Action:
+        - sqs:GetQueueUrl
+        - sqs:SendMessage
+      Resource: !Sub arn:aws:sqs:*:${AWS::AccountId}:${self:custom.emailQueueName}
+    - Effect: Allow
+      Action:
+        - ssm:GetParameters
+        - ssm:GetParametersByPath
+      Resource:
+        - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:provider.stage}/frontend/url
+        - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:provider.stage}/user-service/url
+        - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:provider.stage}/sharing-service/code-secret
+    - Effect: Allow
+      Action:
+        - execute-api:Invoke
+        - execute-api:GET
+      Resource:
+        - !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:*/${self:provider.stage}/GET/user/*
+
+confirm:
+  handler: services/sharing/confirm.main
+  events:
+    - http:
+        path: /{code}
+        method: patch
+        cors: true
+        authorizer:
+          type: COGNITO_USER_POOLS
+          authorizerId:
+            Ref: cognitoAuthorizer
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - events:PutEvents
+      Resource: '*'
+    - Effect: Allow
+      Action:
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource:
+        - '*'
+    - Effect: Allow
+      Action:
+        - ssm:GetParameters
+        - ssm:GetParametersByPath
+      Resource:
+        - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${self:provider.stage}/sharing-service/code-secret
